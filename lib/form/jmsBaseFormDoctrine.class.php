@@ -87,7 +87,7 @@ class jmsBaseFormDoctrine
     $options['relation_alias'] = $relationAlias;
     
     // initialize and embed the collection form
-    $collectionForm = new BaseCollectionForm(array(), $options);
+    $collectionForm = new jmsBaseCollectionForm(array(), $options);
     $form->embedForm($formName, $collectionForm);
   }
 	
@@ -105,6 +105,9 @@ class jmsBaseFormDoctrine
   	// we need to do this via reflection since the property is declared
   	// protected on sfFormObject
     $reflection = new ReflectionObject($form);
-    $reflection->getProperty('object')->setValue($form, $object);
+    $property = $reflection->getProperty('object');
+    $property->setAccessible(true);
+    $property->setValue($form, $object);
+    $property->setAccessible(false);
   }
 }

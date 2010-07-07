@@ -16,45 +16,56 @@
  */
 
 /**
- * This is the base class used by first-level forms which 
- * embed forms of several interdependent objects where the 
- * order of saving is important, and where the top object
- * in the hierarchy can be returned by one of several embedded
- * forms.
+ * This class is useful, if you want to change the saving/update process of
+ * objects from a non-object form (e.g. a collection form). This can also 
+ * be used in complex form hierarchies where the uppermost form must be a
+ * non-object form.
  * 
- * Use Case: 
- * You want to save an Establishment which is owned by a User.
- * The User can either sign up, or login to an existing account.
- * So, you end up with a form that embeds a SignUpForm, 
- * a LoginForm, and an EstablishmentForm.
+ * Use Cases: 
+ * 1. You want to implement a custom collection class which must do something
+ *    special during the save/update process.
+ *    
+ * 2. The top-object in a hierarchy cannot be determined. For example, a form
+ *    where the user can either sign-up, or login, and additionally he can
+ *    create another object which is owned by the user object coming either from
+ *    the sign-up form, or the login form. In this case, you end up embedding
+ *    three object forms in a non-object form which you want to be able to call
+ *    <code>save()</code> upon. 
  * 
+ * @package jmsFormsPlugin
+ * @subpackage form
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
  */
 abstract class jmsFakeObjectForm extends BaseFormDoctrine
 {
 	/**
-	 * We need the constructor from the base form
+	 * Make sure to skip the constructor of all object forms
 	 * 
 	 * @param array $defaults
 	 * @param array $options
 	 * @param mixed $CSRFSecret
 	 * @return void
 	 */
-	public function __construct($defaults = array(), $options = array(), $CSRFSecret = null)
+	public function __construct($defaults = array(), $options = array(), 
+	                            $CSRFSecret = null)
 	{
 		BaseForm::__construct($defaults, $options, $CSRFSecret);
 		$this->object = new jmsFakeRecordObject;				
 	}
 	
 	/**
-	 * We need to implement this method, it's serving no other purpose
-	 * since this form does not actually represent an object.
+	 * This method must be implemented since it is declared abstract; it serves
+	 * no purpose though.
+	 * 
+	 * @return void
 	 */
 	public function getModelName() { }
 	
 	/**
-	 * Overwrite the parent method since we do not retrieve
-	 * the connection for a specific model.
+	 * Returns the current connection; this is the best guess we can make.
+	 * If you need a specific connection, simply override this method.
+	 * 
+	 * @return Doctrine_Connection
 	 */
 	public function getConnection() 
 	{ 
@@ -62,12 +73,14 @@ abstract class jmsFakeObjectForm extends BaseFormDoctrine
 	}
 
 	/**
-	 * Overwrite the parent method since we do not use it.
+	 * There is no actual object to update, so we can skip this.
+	 * 
+	 * @return void
 	 */
 	protected function doUpdateObject($values) { }
 	
 	/**
-	 * Overwrite the parent method since we do not use it.
+	 * Simply return the passed values.
 	 * 
 	 * @param array $values
 	 * @return array
@@ -78,114 +91,127 @@ abstract class jmsFakeObjectForm extends BaseFormDoctrine
 	}
 	
 	/**
-	 * This method is not available.
-	 * @throws LogicException Always if called
+	 * This is not supported since there is no actual object.
+	 * @throws LogicException always when called.
 	 */
 	public function embedI18n($cultures = array(), $decorator = null)
 	{
-		throw new LogicException('This method is not supported in forms extending FakeObjectForm.');
+		throw new LogicException(
+		  'embedI18n() is not supported on instances of jmsFakeObjectForm.');
 	}
 	
 	/**
-	 * This method is not available.
+	 * This is not supported since there is no actual object.
 	 * @throws LogicException Always if called
 	 */
-	public function embedRelation($relationName, $formClass = null, $formArgs = array(), $innerDecorator = null, $decorator = null)
+	public function embedRelation($relationName, $formClass = null, 
+	             $formArgs = array(), $innerDecorator = null, $decorator = null)
 	{
-		throw new LogicException('This method is not supported in forms extending FakeObjectForm.');
+		throw new LogicException(
+		  'embedRelation() is not supported on instances of jmsFakeObjectForm.');
 	}
 	
 	/**
-	 * This method is not available.
+	 * This is not supported since there is no actual object.
 	 * @throws LogicException Always if called
 	 */
 	public function isI18n()
   {
-		throw new LogicException('This method is not supported in forms extending FakeObjectForm.');
+		throw new LogicException(
+		  'isI18n() is not supported on instances of jmsFakeObjectForm.');
   }
     
 	/**
-	 * This method is not available.
+	 * This is not supported since there is no actual object.
 	 * @throws LogicException Always if called
 	 */
   public function getI18nModelName()
   {
-		throw new LogicException('This method is not supported in forms extending FakeObjectForm.');
+		throw new LogicException(
+		  'getI18nModelName() is not supported on instances of jmsFakeObjectForm.');
   }
    
 	/**
-	 * This method is not available.
+	 * This is not supported since there is no actual object.
 	 * @throws LogicException Always if called
 	 */
   public function getI18nFormClass()
   {
-		throw new LogicException('This method is not supported in forms extending FakeObjectForm.');
+		throw new LogicException(
+		  'getI18nFormClass() is not supported on instances of jmsFakeObjectForm.');
   }
     
 	/**
-	 * This method is not available.
-	 * @throws LogicException Always if called
+	 * This is not supported since there is no actual object. However, we cannot
+	 * throw an exception since it is from symfony internally.
 	 */
   protected function updateDefaultsFromObject()
   {
   }
 
 	/**
-	 * This method is not available.
+	 * This is not supported since there is no actual object.
 	 * @throws LogicException Always if called
 	 */
   protected function processUploadedFile($field, $filename = null, $values = null)
   {
-		throw new LogicException('This method is not supported in forms extending FakeObjectForm.');
+		throw new LogicException(
+		  'processUploadedFile() is not supported on instances of jmsFakeObjectForm.');
   }
     
 	/**
-	 * This method is not available.
+	 * This is not supported since there is no actual object.
 	 * @throws LogicException Always if called
 	 */
   protected function removeFile($field)
   {
-		throw new LogicException('This method is not supported in forms extending FakeObjectForm.');
+		throw new LogicException(
+		  'removeFile() is not supported on instances of jmsFakeObjectForm.');
   }
     
 	/**
-	 * This method is not available.
+	 * This is not supported since there is no actual object.
 	 * @throws LogicException Always if called
 	 */
-  protected function saveFile($field, $filename = null, sfValidatedFile $file = null)
+  protected function saveFile($field, $filename = null, 
+                              sfValidatedFile $file = null)
   {
-		throw new LogicException('This method is not supported in forms extending FakeObjectForm.');
+		throw new LogicException(
+		  'saveFile() is not supported on instances of jmsFakeObjectForm.');
   }
     
 	/**
-	 * This method is not available.
+	 * This is not supported since there is no actual object.
 	 * @throws LogicException Always if called
 	 */
   protected function setupInheritance()
   {
-		throw new LogicException('This method is not supported in forms extending FakeObjectForm.');
+		throw new LogicException(
+		  'setupInheritance() is not supported on instances of jmsFakeObjectForm.');
   }
     
 	/**
-	 * This method is not available.
+	 * This is not supported since there is no actual object.
 	 * @throws LogicException Always if called
 	 */
   protected function getRelatedModelName($alias)
   {
-		throw new LogicException('This method is not supported in forms extending FakeObjectForm.');
+		throw new LogicException(
+		  'getRelatedModelName() is not supported on instances of jmsFakeObjectForm.');
   }
     
 	/**
-	 * This method is not available.
+	 * This is not supported since there is no actual object.
 	 * @throws LogicException Always if called
 	 */
   public function isNew()
   {
-		throw new LogicException('This method is not supported in forms extending FakeObjectForm.');
+		throw new LogicException(
+		  'isNew() is not supported on instances of jmsFakeObjectForm.');
   }
     
   /**
-   * We need the base form behavior here
+   * Directly, use the BaseForm method here.
    * @see lib/vendor/symfony/form/addon/sfForm#renderFormTag($url, $attributes)
    */
   public function renderFormTag($url, array $attributes = array())

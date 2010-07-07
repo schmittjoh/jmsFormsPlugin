@@ -16,7 +16,7 @@
  */
 
 /**
- * This provides some advancements to symfony's default BaseForm.
+ * This provides some enhancements to symfony's default BaseForm.
  * 
  * Unfortunately, we cannot provide this as a mixin since we need to override
  * some of the built-in methods. So, you need to set-up your inheritance 
@@ -62,8 +62,11 @@ class jmsBaseForm extends sfFormSymfony
   }
   
   /**
-   * Replaces the default validator schema class with an own class 
-   * @param mixed $class (accepts an instance of the class or the class name as string)
+   * Replaces the default validator schema class with an own class.
+   * All existing validators on the passed schema will be overridden. 
+   *  
+   * @param mixed $class (accepts an instance of the class or the class name 
+   *                      as string)
    */
   public final function replaceValidatorSchema($class)
   {
@@ -76,16 +79,28 @@ class jmsBaseForm extends sfFormSymfony
     foreach ($this->validatorSchema->getFields() as $name => $field)
       $class[$name] = $field;
       
+    if (($preValidator = $this->validatorSchema->getPreValidator()) !== null)
+    {
+    	$class->setPreValidator($preValidator);
+    }
+    
+    if (($postValidator = $this->validatorSchema->getPostValidator()) !== null)
+    {
+      $class->setPostValidator($postValidator);
+    }
+    
     $this->validatorSchema = $class;
   }
   
   /**
-   * Binds this form with the default values
+   * Binds this form with the default values. This is useful if you want to
+   * validate an object without having the user actually send the form.
+   * 
    * @return void
    */
   public final function bindWithDefaults()
   {
-    $this->bind($this->cleanUpDefaults($this->widgetSchema, $this->getDefaults()));
+    $this->bind($this->getCleanedDefaults());
   }
   
   /**
@@ -112,26 +127,15 @@ class jmsBaseForm extends sfFormSymfony
   }
   
   /**
-   * Returns the clean up defaults
+   * Returns the cleaned-up defaults. This clean-up is needed if not all fields
+   * corresponding to the fields of an object are displayed. Consequentially,
+   * for non-object forms this equals <code>getDefaults()</code>.
+   * 
    * @return array
    */
   public final function getCleanedDefaults()
   {
     return $this->cleanUpDefaults($this->widgetSchema, $this->getDefaults());
-  }
-  
-  /**
-   * Removes the given embedded form, also removes the corresponding widget
-   * schema and the corresponding validator schema, and resets generated
-   * form fields.
-   * 
-   * @param string $formName
-   * @deprecated Use removeEmbeddedForms directly
-   * @return void
-   */
-  public final function removeEmbeddedForm($name)
-  {
-  	$this->removeEmbeddedForms($name);
   }
   
   /**
@@ -145,7 +149,8 @@ class jmsBaseForm extends sfFormSymfony
    */
   public final function removeEmbeddedForms()
   {
-  	$forms = is_array(func_get_arg(0))? func_get_arg(0) : func_get_args();
+  	$forms = func_num_args() === 1 && is_array(func_get_arg(0))
+  	           ? func_get_arg(0) : func_get_args();
 
   	// if no forms are passed, all embedded forms are removed
   	if (count($forms) === 0)
@@ -177,7 +182,8 @@ class jmsBaseForm extends sfFormSymfony
   
   /**
    * Automatically re-configure the form, and all embedded forms when the parent
-   * form is bound.
+   * form is bound. This allows you to change values on the client-side via 
+   * Javascript, and still use the same form. 
    * 
    * @param array $taintedValues
    * @param array $taintedFiles
@@ -186,12 +192,12 @@ class jmsBaseForm extends sfFormSymfony
   public function bind(array $taintedValues = null, array $taintedFiles = null)
   {
     $this->configureWithValues($taintedValues, $taintedFiles);
-    
     parent::bind($taintedValues, $taintedFiles);
   }
   
   /**
-   * Call the configureWithValues methods of embedded forms
+   * Call the configureWithValues methods of embedded forms, and see if we need
+   * to re-generate the form fields.
    * 
    * @param array $taintedValues
    * @param array $taintedFiles
