@@ -27,62 +27,62 @@
  */
 class jmsBaseFormDoctrine
 {
-	/**
-	 * Listen to the form.method_not_found event
-	 * 
-	 * @param sfEvent $event
-	 * @return void
-	 */
-	public static function listenToFormMethodNotFound(sfEvent $event)
-	{
-		$form = $event->getSubject();
-		
-		// do not process events of non-object forms
-		if (!$form instanceof BaseFormDoctrine || $form instanceof FakeObjectForm)
-		  return;
-		
-		switch (strtolower($event['method']))
-		{
-			case 'setobject':
-				if (count($event['arguments']) !== 1)
-				  throw new InvalidArugmentException(
-				    'The number of arguments is invalid.');
-				
-				self::setObject($form, $event['arguments'][0]);
-				$event->setProcessed(true);
-				
-				break;
-				
-			case 'embedcollection':
-				if (count($event['arguments']) < 2 || count($event['arguments']) > 3)
-				  throw new InvalidArgumentException(
-				    'The number of arguments is invalid.');
-				  
-				self::embedCollection(
-				  $form, 
-				  $event['arguments'][0], 
-				  $event['arguments'][1],
-				  isset($event['arguments'][2])? $event['arguments'][2] : array()
-				);
-				$event->setProcessed(true);
-				
-				break;
-		}
-	}
-	
-	/**
-	 * A convenience method for embedding collections.
-	 * 
-	 * @param BaseFormDoctrine $form
-	 * @param string $formName
-	 * @param string $relationAlias
-	 * @param array $options
-	 * @return void
-	 */
-	private static function embedCollection(BaseFormDoctrine $form, 
-	                     $formName, $relationAlias, array $options)
+  /**
+   * Listen to the form.method_not_found event
+   * 
+   * @param sfEvent $event
+   * @return void
+   */
+  public static function listenToFormMethodNotFound(sfEvent $event)
   {
-  	// set required options
+    $form = $event->getSubject();
+    
+    // do not process events of non-object forms
+    if (!$form instanceof BaseFormDoctrine || $form instanceof FakeObjectForm)
+      return;
+    
+    switch (strtolower($event['method']))
+    {
+      case 'setobject':
+        if (count($event['arguments']) !== 1)
+          throw new InvalidArugmentException(
+            'The number of arguments is invalid.');
+        
+        self::setObject($form, $event['arguments'][0]);
+        $event->setProcessed(true);
+        
+        break;
+        
+      case 'embedcollection':
+        if (count($event['arguments']) < 2 || count($event['arguments']) > 3)
+          throw new InvalidArgumentException(
+            'The number of arguments is invalid.');
+          
+        self::embedCollection(
+          $form, 
+          $event['arguments'][0], 
+          $event['arguments'][1],
+          isset($event['arguments'][2])? $event['arguments'][2] : array()
+        );
+        $event->setProcessed(true);
+        
+        break;
+    }
+  }
+  
+  /**
+   * A convenience method for embedding collections.
+   * 
+   * @param BaseFormDoctrine $form
+   * @param string $formName
+   * @param string $relationAlias
+   * @param array $options
+   * @return void
+   */
+  private static function embedCollection(BaseFormDoctrine $form, 
+                       $formName, $relationAlias, array $options)
+  {
+    // set required options
     $options['parent_object'] = $form->getObject();
     $options['relation_alias'] = $relationAlias;
     
@@ -90,20 +90,20 @@ class jmsBaseFormDoctrine
     $collectionForm = new jmsBaseCollectionForm(array(), $options);
     $form->embedForm($formName, $collectionForm);
   }
-	
-	/**
-	 * Sets the object of the given form. You should use this method with caution
-	 * and only when you know exactly what you are doing.
-	 * 
-	 * @param BaseFormDoctrine $form
-	 * @param Doctrine_Record $object
-	 * @return void
-	 */
-	private static function setObject(BaseFormDoctrine $form, 
-	                                  Doctrine_Record $object)
+  
+  /**
+   * Sets the object of the given form. You should use this method with caution
+   * and only when you know exactly what you are doing.
+   * 
+   * @param BaseFormDoctrine $form
+   * @param Doctrine_Record $object
+   * @return void
+   */
+  private static function setObject(BaseFormDoctrine $form, 
+                                    Doctrine_Record $object)
   {
-  	// we need to do this via reflection since the property is declared
-  	// protected on sfFormObject
+    // we need to do this via reflection since the property is declared
+    // protected on sfFormObject
     $reflection = new ReflectionObject($form);
     $property = $reflection->getProperty('object');
     $property->setAccessible(true);

@@ -32,7 +32,7 @@ class jmsFormsPluginConfiguration extends sfPluginConfiguration
    */
   public function initialize()
   {
-  	$this->dispatcher->connect('form.method_not_found', 
-  	             array('jmsBaseFormDoctrine', 'listenToFormMethodNotFound'));
+    $this->dispatcher->connect('form.method_not_found', 
+                 array('jmsBaseFormDoctrine', 'listenToFormMethodNotFound'));
   }
 }

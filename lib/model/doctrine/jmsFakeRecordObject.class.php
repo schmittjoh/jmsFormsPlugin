@@ -25,7 +25,7 @@
  */
 class jmsFakeRecordObject extends Doctrine_Record
 {
-	public function save(Doctrine_Connection $con = null)
-	{
-	}
+  public function save(Doctrine_Connection $con = null)
+  {
+  }
 }

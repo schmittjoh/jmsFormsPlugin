@@ -38,176 +38,176 @@
  */
 abstract class jmsFakeObjectForm extends BaseFormDoctrine
 {
-	/**
-	 * Make sure to skip the constructor of all object forms
-	 * 
-	 * @param array $defaults
-	 * @param array $options
-	 * @param mixed $CSRFSecret
-	 * @return void
-	 */
-	public function __construct($defaults = array(), $options = array(), 
-	                            $CSRFSecret = null)
-	{
-		BaseForm::__construct($defaults, $options, $CSRFSecret);
-		$this->object = new jmsFakeRecordObject;				
-	}
-	
-	/**
-	 * This method must be implemented since it is declared abstract; it serves
-	 * no purpose though.
-	 * 
-	 * @return void
-	 */
-	public function getModelName() { }
-	
-	/**
-	 * Returns the current connection; this is the best guess we can make.
-	 * If you need a specific connection, simply override this method.
-	 * 
-	 * @return Doctrine_Connection
-	 */
-	public function getConnection() 
-	{ 
-		return Doctrine_Manager::getInstance()->getCurrentConnection();
-	}
-
-	/**
-	 * There is no actual object to update, so we can skip this.
-	 * 
-	 * @return void
-	 */
-	protected function doUpdateObject($values) { }
-	
-	/**
-	 * Simply return the passed values.
-	 * 
-	 * @param array $values
-	 * @return array
-	 */
-	public function processValues($values)
-	{
-		return $values;
-	}
-	
-	/**
-	 * This is not supported since there is no actual object.
-	 * @throws LogicException always when called.
-	 */
-	public function embedI18n($cultures = array(), $decorator = null)
-	{
-		throw new LogicException(
-		  'embedI18n() is not supported on instances of jmsFakeObjectForm.');
-	}
-	
-	/**
-	 * This is not supported since there is no actual object.
-	 * @throws LogicException Always if called
-	 */
-	public function embedRelation($relationName, $formClass = null, 
-	             $formArgs = array(), $innerDecorator = null, $decorator = null)
-	{
-		throw new LogicException(
-		  'embedRelation() is not supported on instances of jmsFakeObjectForm.');
-	}
-	
-	/**
-	 * This is not supported since there is no actual object.
-	 * @throws LogicException Always if called
-	 */
-	public function isI18n()
+  /**
+   * Make sure to skip the constructor of all object forms
+   * 
+   * @param array $defaults
+   * @param array $options
+   * @param mixed $CSRFSecret
+   * @return void
+   */
+  public function __construct($defaults = array(), $options = array(), 
+                              $CSRFSecret = null)
   {
-		throw new LogicException(
-		  'isI18n() is not supported on instances of jmsFakeObjectForm.');
+    BaseForm::__construct($defaults, $options, $CSRFSecret);
+    $this->object = new jmsFakeRecordObject;        
+  }
+  
+  /**
+   * This method must be implemented since it is declared abstract; it serves
+   * no purpose though.
+   * 
+   * @return void
+   */
+  public function getModelName() { }
+  
+  /**
+   * Returns the current connection; this is the best guess we can make.
+   * If you need a specific connection, simply override this method.
+   * 
+   * @return Doctrine_Connection
+   */
+  public function getConnection() 
+  { 
+    return Doctrine_Manager::getInstance()->getCurrentConnection();
+  }
+
+  /**
+   * There is no actual object to update, so we can skip this.
+   * 
+   * @return void
+   */
+  protected function doUpdateObject($values) { }
+  
+  /**
+   * Simply return the passed values.
+   * 
+   * @param array $values
+   * @return array
+   */
+  public function processValues($values)
+  {
+    return $values;
+  }
+  
+  /**
+   * This is not supported since there is no actual object.
+   * @throws LogicException always when called.
+   */
+  public function embedI18n($cultures = array(), $decorator = null)
+  {
+    throw new LogicException(
+      'embedI18n() is not supported on instances of jmsFakeObjectForm.');
+  }
+  
+  /**
+   * This is not supported since there is no actual object.
+   * @throws LogicException Always if called
+   */
+  public function embedRelation($relationName, $formClass = null, 
+               $formArgs = array(), $innerDecorator = null, $decorator = null)
+  {
+    throw new LogicException(
+      'embedRelation() is not supported on instances of jmsFakeObjectForm.');
+  }
+  
+  /**
+   * This is not supported since there is no actual object.
+   * @throws LogicException Always if called
+   */
+  public function isI18n()
+  {
+    throw new LogicException(
+      'isI18n() is not supported on instances of jmsFakeObjectForm.');
   }
     
-	/**
-	 * This is not supported since there is no actual object.
-	 * @throws LogicException Always if called
-	 */
+  /**
+   * This is not supported since there is no actual object.
+   * @throws LogicException Always if called
+   */
   public function getI18nModelName()
   {
-		throw new LogicException(
-		  'getI18nModelName() is not supported on instances of jmsFakeObjectForm.');
+    throw new LogicException(
+      'getI18nModelName() is not supported on instances of jmsFakeObjectForm.');
   }
    
-	/**
-	 * This is not supported since there is no actual object.
-	 * @throws LogicException Always if called
-	 */
+  /**
+   * This is not supported since there is no actual object.
+   * @throws LogicException Always if called
+   */
   public function getI18nFormClass()
   {
-		throw new LogicException(
-		  'getI18nFormClass() is not supported on instances of jmsFakeObjectForm.');
+    throw new LogicException(
+      'getI18nFormClass() is not supported on instances of jmsFakeObjectForm.');
   }
     
-	/**
-	 * This is not supported since there is no actual object. However, we cannot
-	 * throw an exception since it is from symfony internally.
-	 */
+  /**
+   * This is not supported since there is no actual object. However, we cannot
+   * throw an exception since it is from symfony internally.
+   */
   protected function updateDefaultsFromObject()
   {
   }
 
-	/**
-	 * This is not supported since there is no actual object.
-	 * @throws LogicException Always if called
-	 */
+  /**
+   * This is not supported since there is no actual object.
+   * @throws LogicException Always if called
+   */
   protected function processUploadedFile($field, $filename = null, $values = null)
   {
-		throw new LogicException(
-		  'processUploadedFile() is not supported on instances of jmsFakeObjectForm.');
+    throw new LogicException(
+      'processUploadedFile() is not supported on instances of jmsFakeObjectForm.');
   }
     
-	/**
-	 * This is not supported since there is no actual object.
-	 * @throws LogicException Always if called
-	 */
+  /**
+   * This is not supported since there is no actual object.
+   * @throws LogicException Always if called
+   */
   protected function removeFile($field)
   {
-		throw new LogicException(
-		  'removeFile() is not supported on instances of jmsFakeObjectForm.');
+    throw new LogicException(
+      'removeFile() is not supported on instances of jmsFakeObjectForm.');
   }
     
-	/**
-	 * This is not supported since there is no actual object.
-	 * @throws LogicException Always if called
-	 */
+  /**
+   * This is not supported since there is no actual object.
+   * @throws LogicException Always if called
+   */
   protected function saveFile($field, $filename = null, 
                               sfValidatedFile $file = null)
   {
-		throw new LogicException(
-		  'saveFile() is not supported on instances of jmsFakeObjectForm.');
+    throw new LogicException(
+      'saveFile() is not supported on instances of jmsFakeObjectForm.');
   }
     
-	/**
-	 * This is not supported since there is no actual object.
-	 * @throws LogicException Always if called
-	 */
+  /**
+   * This is not supported since there is no actual object.
+   * @throws LogicException Always if called
+   */
   protected function setupInheritance()
   {
-		throw new LogicException(
-		  'setupInheritance() is not supported on instances of jmsFakeObjectForm.');
+    throw new LogicException(
+      'setupInheritance() is not supported on instances of jmsFakeObjectForm.');
   }
     
-	/**
-	 * This is not supported since there is no actual object.
-	 * @throws LogicException Always if called
-	 */
+  /**
+   * This is not supported since there is no actual object.
+   * @throws LogicException Always if called
+   */
   protected function getRelatedModelName($alias)
   {
-		throw new LogicException(
-		  'getRelatedModelName() is not supported on instances of jmsFakeObjectForm.');
+    throw new LogicException(
+      'getRelatedModelName() is not supported on instances of jmsFakeObjectForm.');
   }
     
-	/**
-	 * This is not supported since there is no actual object.
-	 * @throws LogicException Always if called
-	 */
+  /**
+   * This is not supported since there is no actual object.
+   * @throws LogicException Always if called
+   */
   public function isNew()
   {
-		throw new LogicException(
-		  'isNew() is not supported on instances of jmsFakeObjectForm.');
+    throw new LogicException(
+      'isNew() is not supported on instances of jmsFakeObjectForm.');
   }
     
   /**
@@ -216,7 +216,7 @@ abstract class jmsFakeObjectForm extends BaseFormDoctrine
    */
   public function renderFormTag($url, array $attributes = array())
   {
-  	return BaseForm::renderFormTag($url, $attributes);
+    return BaseForm::renderFormTag($url, $attributes);
   }
     
   /**

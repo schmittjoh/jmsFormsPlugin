@@ -81,7 +81,7 @@ class jmsBaseForm extends sfFormSymfony
       
     if (($preValidator = $this->validatorSchema->getPreValidator()) !== null)
     {
-    	$class->setPreValidator($preValidator);
+      $class->setPreValidator($preValidator);
     }
     
     if (($postValidator = $this->validatorSchema->getPostValidator()) !== null)
@@ -111,19 +111,19 @@ class jmsBaseForm extends sfFormSymfony
    */
   private function cleanUpDefaults(sfWidgetFormSchema $schema, array $defaults)
   {
-	  foreach ($defaults as $key => $value)
-	  {
-	    if (!isset($schema[$key]))
-	    {
-	      unset($defaults[$key]);
-	      continue;
-	    }
-	    
-	    if (is_array($value))
-	      $defaults[$key] = $this->cleanUpDefaults($schema[$key], $value);
-	  }
-	  
-	  return $defaults;
+    foreach ($defaults as $key => $value)
+    {
+      if (!isset($schema[$key]))
+      {
+        unset($defaults[$key]);
+        continue;
+      }
+      
+      if (is_array($value))
+        $defaults[$key] = $this->cleanUpDefaults($schema[$key], $value);
+    }
+    
+    return $defaults;
   }
   
   /**
@@ -149,33 +149,33 @@ class jmsBaseForm extends sfFormSymfony
    */
   public final function removeEmbeddedForms()
   {
-  	$forms = func_num_args() === 1 && is_array(func_get_arg(0))
-  	           ? func_get_arg(0) : func_get_args();
+    $forms = func_num_args() === 1 && is_array(func_get_arg(0))
+               ? func_get_arg(0) : func_get_args();
 
-  	// if no forms are passed, all embedded forms are removed
-  	if (count($forms) === 0)
-  	{
-	    foreach ($this->embeddedForms as $name => $form)
-	    {
-	      unset($this->embeddedForms[$name]);
-	      unset($this->widgetSchema[$name]);
-	      unset($this->validatorSchema[$name]);
-	    }
-  	}
-  	else
-  	{
-  		foreach ($forms as $form)
-  		{
-  			if (!$this->hasEmbeddedForm($form))
-  			  throw new InvalidArgumentException(
-  			    sprintf('The form "%s" does not exist.', $form)
-  			  );
-  			
-  			unset($this->embeddedForms[$form]);
-  			unset($this->widgetSchema[$form]);
-  			unset($this->validatorSchema[$form]);
-  		}
-  	}
+    // if no forms are passed, all embedded forms are removed
+    if (count($forms) === 0)
+    {
+      foreach ($this->embeddedForms as $name => $form)
+      {
+        unset($this->embeddedForms[$name]);
+        unset($this->widgetSchema[$name]);
+        unset($this->validatorSchema[$name]);
+      }
+    }
+    else
+    {
+      foreach ($forms as $form)
+      {
+        if (!$this->hasEmbeddedForm($form))
+          throw new InvalidArgumentException(
+            sprintf('The form "%s" does not exist.', $form)
+          );
+        
+        unset($this->embeddedForms[$form]);
+        unset($this->widgetSchema[$form]);
+        unset($this->validatorSchema[$form]);
+      }
+    }
     
     $this->resetFormFields();
   }
